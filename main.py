@@ -25,6 +25,7 @@ show_fps_on_screen = True
 
 # Параметри гравітації
 gravity = 1
+drag = 0.5
 
 #main loop
 running = True
@@ -42,7 +43,7 @@ while running:
 
                 # Створюємо нове коло
                 color = (50,10,150)
-                radius = random.randint(5,10)
+                radius = random.randint(8,12)
                 new_circle = {"x": mouse_x, "y": mouse_y, "radius": radius, "color": color,
                               "velocity_y": 0, "velocity_x": 10}
                 circles.append(new_circle)
@@ -53,7 +54,7 @@ while running:
 
                 # Створюємо нове коло
                 color = (150,150,10)
-                radius = random.randint(5,10)
+                radius = random.randint(8,12)
                 new_circle = {"x": mouse_x, "y": mouse_y, "radius": radius, "color": color,
                               "velocity_y": 0, "velocity_x": -10}
                 circles.append(new_circle)
@@ -79,11 +80,11 @@ while running:
         # Перевірка зіткнення з правою стіною для кожного кола
         if circle ["x"] + circle["radius"] >= width:
             circle["x"] = width - circle["radius"]
-            circle["velocity_x"] = -circle["velocity_x"] * 0.9
+            circle["velocity_x"] = -circle["velocity_x"] * drag
         # Перевірка зіткнення з лівою стіною для кожного кола
         if circle ["x"] + circle["radius"] < 0:
             circle["x"] = 0 + circle["radius"]
-            circle["velocity_x"] = -circle["velocity_x"] * 0.9
+            circle["velocity_x"] = -circle["velocity_x"] * drag
         # Перевірка зіткнення з іншим елементом
 
         pg.draw.circle(screen, circle["color"], (circle["x"], circle["y"]), circle["radius"])
@@ -94,11 +95,18 @@ while running:
         fps_text = text_font.render(f"FPS: {fps:.2f}", True, (0, 0, 0))  # Створюємо текст
         screen.blit(fps_text, (10, 10))  # Відображаємо текст на екрані
 
+    text_LBM = text_font.render("Press LBM for blue balls", True, (0,0,0)) #creat text
+    text_RBM = text_font.render("Press RBM for yellow balls", True, (0,0,0))
+    text_FPS = text_font.render("Press F for check FPS", True, (0,0,0))
+    screen.blit(text_LBM, (10,30))
+    screen.blit(text_RBM, (10,50))
+    screen.blit(text_FPS, (10,70))
+
     # Оновлення екрану
     pg.display.flip()
 
     # Обмеження FPS (за бажанням)
-    clock.tick(120)  # Обмежуємо FPS
+    clock.tick(180)  # Обмежуємо FPS
 
 # Завершення роботи Pygame
 pg.quit()
