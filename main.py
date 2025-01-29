@@ -25,8 +25,6 @@ show_fps_on_screen = True
 
 # Параметри гравітації
 gravity = 1
-velocity_x = 0
-velocity_y = 0
 
 #main loop
 running = True
@@ -46,7 +44,7 @@ while running:
                 color = (50,10,150)
                 radius = random.randint(5,10)
                 new_circle = {"x": mouse_x, "y": mouse_y, "radius": radius, "color": color,
-                              "velocity_y": 0, "velocity_x": 0}
+                              "velocity_y": 0, "velocity_x": 10}
                 circles.append(new_circle)
         if event.type == pg.MOUSEBUTTONDOWN:  # Перевірка натискання кнопки миші
             if event.button == 3:  # 3 - права кнопка миші
@@ -57,7 +55,7 @@ while running:
                 color = (150,150,10)
                 radius = random.randint(5,10)
                 new_circle = {"x": mouse_x, "y": mouse_y, "radius": radius, "color": color,
-                              "velocity_y": 0, "velocity_x": 0}
+                              "velocity_y": 0, "velocity_x": -10}
                 circles.append(new_circle)
 
     # Заповнення фону
@@ -68,6 +66,7 @@ while running:
         # Застосування гравітації до кожного окремого кола
         circle["velocity_y"] += gravity
         circle["y"] += circle["velocity_y"]
+        circle["x"] += circle["velocity_x"]
 
         # Перевірка зіткнення з дном для кожного кола
         if circle["y"] + circle["radius"] >= height:
@@ -75,16 +74,17 @@ while running:
             circle["velocity_y"] = -circle["velocity_y"] * 0.9
         # Перевірка зіткнення з верхом для кожного кола
         if circle["y"] + circle["radius"] < 0:
-            circle["y"] = 0 - circle["radius"]
+            circle["y"] = 0 + circle["radius"]
             circle["velocity_y"] = -circle["velocity_y"] * 0.9
-
-        # Перевірка зіткнення з верхом для кожного кола
-
+        # Перевірка зіткнення з правою стіною для кожного кола
+        if circle ["x"] + circle["radius"] >= width:
+            circle["x"] = width - circle["radius"]
+            circle["velocity_x"] = -circle["velocity_x"] * 0.9
+        # Перевірка зіткнення з лівою стіною для кожного кола
+        if circle ["x"] + circle["radius"] < 0:
+            circle["x"] = 0 + circle["radius"]
+            circle["velocity_x"] = -circle["velocity_x"] * 0.9
         # Перевірка зіткнення з іншим елементом
-        if circle["y"] + circle["radius"] == circle["y"] + circle["radius"]:
-            circle["x"] = circle["x"] + circle["radius"]
-            rand_array = [-1, 1]
-            circle["velociry_x"] = -circle["velocity_x"] * 0.9
 
         pg.draw.circle(screen, circle["color"], (circle["x"], circle["y"]), circle["radius"])
 
